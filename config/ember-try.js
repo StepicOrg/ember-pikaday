@@ -1,130 +1,102 @@
-/*jshint node:true*/
-module.exports = {
-  scenarios: [
-    {
-      name: 'default',
-      bower: {
-        dependencies: { }
-      }
-    },
-    {
-      name: 'ember-1.13.1',
-      bower: {
-        dependencies: {
-          'ember': '1.13.1'
+'use strict';
+
+const getChannelURL = require('ember-source-channel-url');
+
+module.exports = function() {
+  return Promise.all([
+    getChannelURL('release'),
+    getChannelURL('beta'),
+    getChannelURL('canary')
+  ]).then(urls => {
+    return {
+      useYarn: true,
+      scenarios: [
+        {
+          name: 'ember-lts-2.12',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({
+              'jquery-integration': true
+            })
+          },
+          npm: {
+            devDependencies: {
+              '@ember/jquery': '^0.5.2',
+              'ember-source': '~2.12.0'
+            }
+          }
         },
-        resolutions: {
-          'ember': '1.13.1'
-        }
-      },
-      npm: {
-        devDependencies: {
-          'ember-hash-helper-polyfill': '0.1.1'
-        }
-      }
-    },
-    {
-      name: 'ember-1.13.13',
-      bower: {
-        dependencies: {
-          'ember': '1.13.13'
+        {
+          name: 'ember-lts-2.16',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({
+              'jquery-integration': true
+            })
+          },
+          npm: {
+            devDependencies: {
+              '@ember/jquery': '^0.5.2',
+              'ember-source': '~2.16.0'
+            }
+          }
         },
-        resolutions: {
-          'ember': '1.13.13'
-        }
-      },
-      npm: {
-        devDependencies: {
-          'ember-hash-helper-polyfill': '0.1.1'
-        }
-      }
-    },
-    {
-      name: 'ember-2.4.3',
-      bower: {
-        dependencies: {
-          'ember': '2.4.3'
+        {
+          name: 'ember-lts-2.18',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({
+              'jquery-integration': true
+            })
+          },
+          npm: {
+            devDependencies: {
+              '@ember/jquery': '^0.5.2',
+              'ember-source': '~2.18.0'
+            }
+          }
         },
-        resolutions: {
-          'ember': '2.4.3'
-        }
-      }
-    },
-    {
-      name: 'ember-2.3.1',
-      bower: {
-        dependencies: {
-          'ember': '2.3.1'
+        {
+          name: 'ember-release',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[0]
+            }
+          }
         },
-        resolutions: {
-          'ember': '2.3.1'
-        }
-      }
-    },
-    {
-      name: 'ember-2.2.2',
-      bower: {
-        dependencies: {
-          'ember': '2.2.2'
+        {
+          name: 'ember-beta',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[1]
+            }
+          }
         },
-        resolutions: {
-          'ember': '2.2.2'
-        }
-      },
-      npm: {
-        devDependencies: {
-          'ember-hash-helper-polyfill': '0.1.1'
-        }
-      }
-    },
-    {
-      name: 'ember-2.0.2',
-      bower: {
-        dependencies: {
-          'ember': '2.0.2'
+        {
+          name: 'ember-canary',
+          npm: {
+            devDependencies: {
+              'ember-source': urls[2]
+            }
+          }
         },
-        resolutions: {
-          'ember': '2.0.2'
-        }
-      },
-      npm: {
-        devDependencies: {
-          'ember-hash-helper-polyfill': '0.1.1'
-        }
-      }
-    },
-    {
-      name: 'ember-release',
-      bower: {
-        dependencies: {
-          'ember': 'components/ember#release'
+        {
+          name: 'ember-default',
+          npm: {
+            devDependencies: {}
+          }
         },
-        resolutions: {
-          'ember': 'release'
+        {
+          name: 'ember-default-with-jquery',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({
+              'jquery-integration': true
+            })
+          },
+          npm: {
+            devDependencies: {
+              '@ember/jquery': '^0.5.2'
+            }
+          }
         }
-      }
-    },
-    {
-      name: 'ember-beta',
-      bower: {
-        dependencies: {
-          'ember': 'components/ember#beta'
-        },
-        resolutions: {
-          'ember': 'beta'
-        }
-      }
-    },
-    {
-      name: 'ember-canary',
-      bower: {
-        dependencies: {
-          'ember': 'components/ember#canary'
-        },
-        resolutions: {
-          'ember': 'canary'
-        }
-      }
-    }
-  ]
+      ]
+    };
+  });
 };

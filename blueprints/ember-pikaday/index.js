@@ -1,7 +1,7 @@
 module.exports = {
-  normalizeEntityName: function() {},
+  normalizeEntityName() {},
 
-  afterInstall: function() {
-    return this.addAddonToProject('ember-cli-moment-shim', '2.1.0');
+  afterInstall() {
+    return this.addAddonToProject('ember-cli-moment-shim', '^3.0.1');
   }
 };

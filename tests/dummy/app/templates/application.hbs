@@ -1,14 +1,31 @@
-<h2 id='title'>Welcome to Ember.js</h2>
+<h2 id="title">Welcome to Ember.js</h2>
 
 {{outlet}}
 
 Standalone datepicker:
-{{pikaday-input format='dddd MMMM Do YYYY, h:mm:ss a' theme='dark-theme' onSelection=(action 'doSomethingWithSelectedValue')}}
+{{pikaday-input
+  format="dddd MMMM Do YYYY, h:mm:ss a"
+  theme="dark-theme"
+  onSelection=(action "doSomethingWithSelectedValue")
+}}
 
 <br>
 
+Datepicker with minDate set to today ({{input type="checkbox" checked=isMinDateSet}}) and maxDate set to today ({{input type="checkbox" checked=isMaxDateSet}}):
+{{pikaday-input
+  minDate=(if isMinDateSet today null)
+  maxDate=(if isMaxDateSet today null)
+  value=someDate
+  onSelection=(action (mut someDate))
+}}
+<br>
+
 Datepicker with bound and set value:
-{{pikaday-input value=startDate onSelection=(action (mut startDate)) format='DD.MM.YYYY'}}
+{{pikaday-input
+  value=startDate
+  onSelection=(action (mut startDate))
+  format="DD.MM.YYYY"
+}}
 {{startDate}}
 <br>
 <button {{action "clearStartDate"}}>Clear Date</button>

@@ -1,49 +1,70 @@
-import Ember from 'ember';
+import $ from 'jquery';
+import { deprecate } from '@ember/debug';
 
-var $ = Ember.$;
+deprecate(
+  'Pikaday helpers from `ember-pikaday/helpers/pikaday` will be removed in the next major version; please use `async/await` helpers from `ember-pikaday/test-support`',
+  true,
+  {
+    id: 'ember-pikaday.test-support-helpers',
+    until: '3.0.0'
+  }
+);
 
-var openDatepicker = function(element) {
+const openDatepicker = function(element) {
   $(element).click();
 
   return PikadayInteractor;
 };
 
-var PikadayInteractor = {
+const PikadayInteractor = {
   selectorForMonthSelect: '.pika-lendar:visible .pika-select-month',
   selectorForYearSelect: '.pika-lendar:visible .pika-select-year',
-  selectDate: function(date) {
-    var day = date.getDate();
-    var month = date.getMonth();
-    var year = date.getFullYear();
-    var selectEvent = 'ontouchend' in document ? 'touchend' : 'mousedown';
+  selectDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const selectEvent = 'ontouchend' in document ? 'touchend' : 'mousedown';
 
     $(this.selectorForYearSelect).val(year);
     triggerNativeEvent($(this.selectorForYearSelect)[0], 'change');
     $(this.selectorForMonthSelect).val(month);
     triggerNativeEvent($(this.selectorForMonthSelect)[0], 'change');
 
-    triggerNativeEvent($('td[data-day="' + day + '"] button:visible')[0], selectEvent);
+    triggerNativeEvent(
+      $(
+        'td[data-day="' +
+          day +
+          '"]:not(.is-outside-current-month) button:visible'
+      )[0],
+      selectEvent
+    );
   },
-  selectedDay: function() {
+  selectedDay() {
     return $('.pika-single td.is-selected button').html();
   },
-  selectedMonth: function() {
+  selectedMonth() {
     return $(this.selectorForMonthSelect + ' option:selected').val();
   },
-  selectedYear: function() {
+  selectedYear() {
     return $(this.selectorForYearSelect + ' option:selected').val();
   },
-  minimumYear: function() {
-    return $(this.selectorForYearSelect).children().first().val();
+  minimumYear() {
+    return $(this.selectorForYearSelect)
+      .children()
+      .first()
+      .val();
   },
-  maximumYear: function() {
-    return $(this.selectorForYearSelect).children().last().val();
+  maximumYear() {
+    return $(this.selectorForYearSelect)
+      .children()
+      .last()
+      .val();
   }
 };
 
 function triggerNativeEvent(element, eventName) {
   if (document.createEvent) {
-    var event = document.createEvent('Events');
+    const event = document.createEvent('Events');
     event.initEvent(eventName, true, false);
     element.dispatchEvent(event);
   } else {
